@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+	<Header>
+	<Title>Create Procedure With Transaction Template</Title>
+        <Shortcut></Shortcut>
+	<Description>Creates SQL stored procedure.</Description>
+	<Author>V. Gasic</Author>
+	<SnippetTypes>
+		<SnippetType>Expansion</SnippetType>
+	</SnippetTypes>
+	</Header>
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>Name</ID>
+				<ToolTip>Procedure Name</ToolTip>
+				<Default>procedureName</Default>
+			</Literal>
+			<Literal>
+				<ID>Date</ID>
+				<ToolTip>Date Created</ToolTip>
+				<Default>Today</Default>
+			</Literal>
+		</Declarations>
+		<Code Language="SQL">
+			<![CDATA[IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'dbo.$Name$') AND OBJECTPROPERTY(id,N'IsProcedure') = 1)
+	DROP PROCEDURE dbo.$Name$
+GO
+
+-------------------------------------------------------
+-- $Date$; V. Gasic; Created
+-------------------------------------------------------
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_NULLS ON
+GO
+
+CREATE PROCEDURE dbo.$Name$ AS
+BEGIN
+	SET XACT_ABORT ON
+	BEGIN TRY
+	BEGIN TRANSACTION $Name$
+		
+		$end$
+		
+	COMMIT TRANSACTION $Name$
+	END TRY
+	
+	BEGIN CATCH
+		ROLLBACK TRANSACTION $Name$
+
+		--cleanup code
+		DECLARE @error varchar(4000)
+		SELECT @error = ERROR_MESSAGE()
+		RAISERROR(@error,16,1)
+	END CATCH
+END
+
+SET QUOTED_IDENTIFIER OFF
+GO
+SET ANSI_NULLS ON
+GO
+-------------------------------------------------------
+-------------------------------------------------------
+]]>
+		</Code>
+	</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
+

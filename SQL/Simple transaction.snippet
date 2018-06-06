@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Transaction simple</Title>
+      <Author />
+      <Description />
+      <HelpUrl />
+      <SnippetTypes />
+      <Keywords />
+      <Shortcut />
+    </Header>
+    <Snippet>
+      <References />
+      <Imports />
+      <Declarations>
+        <Literal Editable="true">
+          <ID>naziv</ID>
+          <Type />
+          <ToolTip />
+          <Default>naziv</Default>
+          <Function />
+        </Literal>
+      </Declarations>
+      <Code Language="SQL" Delimiter="$"><![CDATA[BEGIN TRANSACTION $naziv$
+
+$end$
+
+/*
+ROLLBACK TRANSACTION $naziv$
+COMMIT TRANSACTION $naziv$
+SELECT @@trancount
+*/]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

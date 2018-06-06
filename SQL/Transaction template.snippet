@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+	<Header>
+	<Title>Transaction template (try/catch)</Title>
+        <Shortcut></Shortcut>
+	<Description>Creates SQL stored procedure.</Description>
+	<Author>V. Gasic</Author>
+	<SnippetTypes>
+		<SnippetType>Expansion</SnippetType>
+	</SnippetTypes>
+	</Header>
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>Name</ID>
+				<ToolTip>Transaction Name</ToolTip>
+				<Default>transactionName</Default>
+			</Literal>
+			<Literal>
+				<ID>Date</ID>
+				<ToolTip>Date Created</ToolTip>
+				<Default>Today</Default>
+			</Literal>
+		</Declarations>
+		<Code Language="SQL">
+			<![CDATA[SET XACT_ABORT ON
+BEGIN TRY
+BEGIN TRANSACTION $Name$
+
+BEGIN	
+	$end$
+END	
+	
+COMMIT TRANSACTION $Name$
+END TRY
+
+BEGIN CATCH
+	ROLLBACK TRANSACTION $Name$
+
+	--cleanup code
+	DECLARE @error varchar(4000)
+	SELECT @error = ERROR_MESSAGE()
+	RAISERROR(@error,16,1)
+END CATCH]]>
+		</Code>
+	</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
+

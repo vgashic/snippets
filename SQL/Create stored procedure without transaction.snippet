@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Create stored procedure without transaction</Title>
+      <Author>V. Gasic</Author>
+      <Description>Creates stored procedure without transaction template</Description>
+      <HelpUrl />
+      <SnippetTypes />
+      <Keywords />
+      <Shortcut />
+    </Header>
+    <Snippet>
+      <References />
+      <Imports />
+      <Declarations>
+        <Literal Editable="true">
+          <ID>ProcName</ID>
+          <Type />
+          <ToolTip />
+          <Default>ProcName</Default>
+          <Function />
+        </Literal>
+        <Literal Editable="true">
+          <ID>Datum</ID>
+          <Type />
+          <ToolTip />
+          <Default>Datum</Default>
+          <Function />
+        </Literal>
+        <Literal Editable="true">
+          <ID>Who</ID>
+          <Type />
+          <ToolTip />
+          <Default>Who</Default>
+          <Function />
+        </Literal>
+        <Literal Editable="true">
+          <ID>Parameters</ID>
+          <Type />
+          <ToolTip />
+          <Default>Parameters</Default>
+          <Function />
+        </Literal>
+      </Declarations>
+      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'dbo.$ProcName$') AND OBJECTPROPERTY(id,N'IsProcedure') = 1)
+	DROP PROCEDURE dbo.$ProcName$
+GO
+
+-------------------------------------------------------
+-- $Datum$; $Who$; Created
+-------------------------------------------------------
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_NULLS ON
+GO
+
+CREATE PROCEDURE dbo.$ProcName$
+	$Parameters$
+AS
+BEGIN
+	$end$
+END
+
+SET QUOTED_IDENTIFIER OFF
+GO
+SET ANSI_NULLS ON
+GO
+-------------------------------------------------------
+-------------------------------------------------------]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

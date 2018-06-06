@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Create new spy trigger and archive table</Title>
+      <Author />
+      <Description />
+      <HelpUrl />
+      <SnippetTypes />
+      <Keywords />
+      <Shortcut />
+    </Header>
+    <Snippet>
+      <References />
+      <Imports />
+      <Declarations>
+        <Literal Editable="true">
+          <ID>tabela</ID>
+          <Type />
+          <ToolTip />
+          <Default>tabela</Default>
+          <Function />
+        </Literal>
+      </Declarations>
+      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[EXEC dbo.tsp_CreateTriggerArchiveTable '$tabela$'
+EXEC dbo.tsp_CreateSpyTrigger '$tabela$', 1
+
+$end$]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

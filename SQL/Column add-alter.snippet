@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Add / Alter column</Title>
+      <Author />
+      <Description>Add column if not exists. Alter if exists</Description>
+      <HelpUrl />
+      <SnippetTypes />
+      <Keywords />
+      <Shortcut />
+    </Header>
+    <Snippet>
+      <References />
+      <Imports />
+      <Declarations>
+        <Literal Editable="true">
+          <ID>table</ID>
+          <Type />
+          <ToolTip />
+          <Default>table</Default>
+          <Function />
+        </Literal>
+        <Literal Editable="true">
+          <ID>column</ID>
+          <Type />
+          <ToolTip />
+          <Default>column</Default>
+          <Function />
+        </Literal>
+        <Literal Editable="true">
+          <ID>type</ID>
+          <Type />
+          <ToolTip />
+          <Default>type</Default>
+          <Function />
+        </Literal>
+        <Literal Editable="true">
+          <ID>nulable</ID>
+          <Type />
+          <ToolTip />
+          <Default>NULL</Default>
+          <Function />
+        </Literal>
+      </Declarations>
+      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[IF NOT EXISTS(
+     SELECT * FROM information_schema.columns
+     WHERE table_name = '$table$' AND column_name = '$column$' )
+BEGIN
+     ALTER TABLE dbo.$table$
+     ADD $column$ $type$ $nulable$ 
+END
+ELSE 
+BEGIN 
+	ALTER TABLE dbo.$table$
+	ALTER COLUMN $column$ $type$ $nulable$ 	
+END]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
