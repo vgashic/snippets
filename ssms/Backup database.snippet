@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Backup database</Title>
+      <Author>V. Gasic</Author>
+      <Description />
+      <HelpUrl />
+      <SnippetTypes />
+      <Keywords />
+      <Shortcut />
+    </Header>
+    <Snippet>
+      <References />
+      <Imports />
+      <Declarations>
+        <Literal Editable="true">
+          <ID>dbName</ID>
+          <Type />
+          <ToolTip />
+          <Default>dbName</Default>
+          <Function />
+        </Literal>
+        <Literal Editable="true">
+          <ID>path</ID>
+          <Type />
+          <ToolTip />
+          <Default>path</Default>
+          <Function />
+        </Literal>
+      </Declarations>
+      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[backup database [$dbName$] TO  disk = N'$path$' with noformat, init, name = N'$dbName$-Full Database Backup', skip, norewind, nounload, stats = 10
+go
+
+declare @backupSetId as int
+select @backupSetId = position from msdb..backupset where database_name=N'$dbName$' and backup_set_id=(select max(backup_set_id) from msdb..backupset where database_name=N'$dbName$' )
+if @backupSetId is null
+begin 
+  raiserror(N'Verify failed. Backup information for database ''$dbName$'' not found.', 16, 1)
+end
+
+restore verifyonly from disk = N'$path$' WITH  FILE = @backupSetId, nounload, norewind
+go
+$end$]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

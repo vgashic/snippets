@@ -36,25 +36,25 @@
           <Function />
         </Literal>
         <Literal Editable="true">
-          <ID>nulable</ID>
+          <ID>nullable</ID>
           <Type />
           <ToolTip />
           <Default>NULL</Default>
           <Function />
         </Literal>
       </Declarations>
-      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[IF NOT EXISTS(
-     SELECT * FROM information_schema.columns
-     WHERE table_name = '$table$' AND column_name = '$column$' )
-BEGIN
-     ALTER TABLE dbo.$table$
-     ADD $column$ $type$ $nulable$ 
-END
-ELSE 
-BEGIN 
-	ALTER TABLE dbo.$table$
-	ALTER COLUMN $column$ $type$ $nulable$ 	
-END]]></Code>
+      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[if not exists(
+     select * from information_schema.columns
+     where table_name = '$table$' and column_name = '$column$' )
+begin
+     alter table dbo.$table$
+     add $column$ $type$ $nullable$ 
+end
+else 
+begin 
+	alter table dbo.$table$
+	alter column $column$ $type$ $nullable$ 	
+end]]></Code>
     </Snippet>
   </CodeSnippet>
 </CodeSnippets>
