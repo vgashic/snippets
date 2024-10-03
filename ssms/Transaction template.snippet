@@ -31,27 +31,26 @@
 			</Literal>
 		</Declarations>
 		<Code Language="SQL">
-			<![CDATA[SET XACT_ABORT ON
-BEGIN TRY
-BEGIN TRANSACTION $Name$
+			<![CDATA[set xact_abort on
+begin try
+begin transaction $name$
 
-BEGIN	
+begin	
 	$end$
-END	
+end	
 	
-COMMIT TRANSACTION $Name$
-END TRY
+commit transaction $name$
+end try
 
-BEGIN CATCH
-	ROLLBACK TRANSACTION $Name$
+begin catch
+	rollback transaction $name$
 
 	--cleanup code
-	DECLARE @error varchar(4000)
-	SELECT @error = ERROR_MESSAGE()
-	RAISERROR(@error,16,1)
-END CATCH]]>
+	declare @error varchar(4000)
+	select @error = error_message()
+	raiserror(@error,16,1)
+end catch]]>
 		</Code>
 	</Snippet>
 	</CodeSnippet>
 </CodeSnippets>
-

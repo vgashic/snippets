@@ -29,9 +29,9 @@
           <Function></Function>
         </Literal>
       </Declarations>
-      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[IF EXISTS (SELECT * FROM information_schema.tables WHERE table_name='$table$' AND table_schema = '$schema$')
-		DROP TABLE $schema$.$table$
-GO$end$]]></Code>
+      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[if exists (select * from information_schema.tables where table_name='$table$' and table_schema = '$schema$')
+		drop table $schema$.$table$
+go$end$]]></Code>
     </Snippet>
   </CodeSnippet>
 </CodeSnippets>

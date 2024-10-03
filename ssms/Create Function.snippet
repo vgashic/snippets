@@ -46,36 +46,21 @@
           <ID>username</ID>
           <Type />
           <ToolTip />
-          <Default>V. Gasic</Default>
+          <Default></Default>
           <Function />
         </Literal>
       </Declarations>
-      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'dbo.$name$') AND xtype IN (N'FN', N'IF', N'TF'))
-	DROP FUNCTION dbo.$name$
-GO
+      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[if exists (select * from dbo.sysobjects where id = object_id(N'dbo.$name$') and xtype in (N'FN', N'IF', N'TF'))
+	drop function dbo.$name$
+go
 
--------------------------------------------------------
--- $date$; $username$; Created
--------------------------------------------------------
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_NULLS ON
-GO
-
-CREATE FUNCTION dbo.$name$ ($parameters$)
-RETURNS $type$
-AS
-BEGIN
+create function dbo.$name$ ($parameters$)
+returns $type$
+as
+begin
 	$end$
-END
-
-GO
-SET QUOTED_IDENTIFIER OFF
-GO
-SET ANSI_NULLS ON
-GO
--------------------------------------------------------
-------------------------------------------------------]]></Code>
+end
+]]></Code>
     </Snippet>
   </CodeSnippet>
 </CodeSnippets>

@@ -22,11 +22,11 @@
           <Function></Function>
         </Literal>
       </Declarations>
-      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[IF EXISTS (SELECT * FROM sys.views WHERE name = '$view$')
-	DROP VIEW $view$
-GO
+      <Code Language="SQL" Kind="" Delimiter="$"><![CDATA[if exists (select * from sys.views where name = '$view$')
+	drop view $view$
+go
 
-CREATE VIEW $view$ AS
+create view $view$ as
 $end$]]></Code>
     </Snippet>
   </CodeSnippet>

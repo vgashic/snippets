@@ -15,20 +15,20 @@
       <Imports />
       <Declarations>
         <Literal Editable="true">
-          <ID>naziv</ID>
+          <ID>name</ID>
           <Type />
           <ToolTip />
-          <Default>naziv</Default>
+          <Default>name</Default>
           <Function />
         </Literal>
       </Declarations>
-      <Code Language="SQL" Delimiter="$"><![CDATA[BEGIN TRANSACTION $naziv$
+      <Code Language="SQL" Delimiter="$"><![CDATA[BEGIN TRANSACTION $name$
 
 $end$
 
 /*
-ROLLBACK TRANSACTION $naziv$
-COMMIT TRANSACTION $naziv$
+ROLLBACK TRANSACTION $name$
+COMMIT TRANSACTION $name$
 SELECT @@trancount
 */]]></Code>
     </Snippet>

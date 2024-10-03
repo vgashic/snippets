@@ -20,8 +20,8 @@
 	<Snippet>
 		<Declarations>
 			<Literal>
-				<ID>Name</ID>
-				<ToolTip>Procedure Name</ToolTip>
+				<ID>name</ID>
+				<ToolTip>procedure name</ToolTip>
 				<Default>procedureName</Default>
 			</Literal>
 			<Literal>
@@ -31,48 +31,32 @@
 			</Literal>
 		</Declarations>
 		<Code Language="SQL">
-			<![CDATA[IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'dbo.$Name$') AND OBJECTPROPERTY(id,N'IsProcedure') = 1)
-	DROP PROCEDURE dbo.$Name$
-GO
+			<![CDATA[if exists (select * from dbo.sysobjects where id = object_id(N'dbo.$Name$') and objectproperty(id, N'IsProcedure') = 1)
+	drop procedure dbo.$name$
+go
 
--------------------------------------------------------
--- $Date$; V. Gasic; Created
--------------------------------------------------------
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_NULLS ON
-GO
-
-CREATE PROCEDURE dbo.$Name$ AS
-BEGIN
-	SET XACT_ABORT ON
-	BEGIN TRY
-	BEGIN TRANSACTION $Name$
+create procedure dbo.$name$ as
+begin
+	set xact_abort on
+	begin try
+	begin transaction $name$
 		
 		$end$
 		
-	COMMIT TRANSACTION $Name$
-	END TRY
+	commit transaction $name$
+	end try
 	
-	BEGIN CATCH
-		ROLLBACK TRANSACTION $Name$
+	begin catch
+		rollback transaction $name$
 
 		--cleanup code
-		DECLARE @error varchar(4000)
-		SELECT @error = ERROR_MESSAGE()
-		RAISERROR(@error,16,1)
-	END CATCH
-END
-
-SET QUOTED_IDENTIFIER OFF
-GO
-SET ANSI_NULLS ON
-GO
--------------------------------------------------------
--------------------------------------------------------
+		declare @error varchar(4000)
+		select @error = error_message()
+		raiserror(@error,16,1)
+	end catch
+end
 ]]>
 		</Code>
 	</Snippet>
 	</CodeSnippet>
 </CodeSnippets>
-
