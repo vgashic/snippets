@@ -1,0 +1,347 @@
+{
+	// Place your snippets for sql here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+
+	"transaction template": {
+		"prefix": "sql_Transaction",
+		"body": [
+			"set xact_abort on",
+			"begin try",
+			"begin transaction ${1:tranName}",
+			"	 $0",
+			"commit transaction ${1:tranName}",
+			"end try",
+			"",
+			"begin catch",
+			"	 rollback transaction ${1:tranName}",
+			"",
+			"	 declare @error_${1:tranName} varchar(4000)",
+			"	 select @error_${1:tranName} = error_message()",
+			"	 raiserror(@error_${1:tranName},16,1)",
+			"end catch"
+		],
+		"description": "Transaction template with try/catch block"
+	},
+	"drop temp table": {
+		"prefix": "sql_TempDrop",
+		"body": [
+			"if object_id('tempdb..${1:tableName}') is not null drop table ${1:tableName}$0"
+		],
+		"description": "Drops temp table if exists"
+	},
+	"create stored procedure": {
+		"prefix": "sql_SpCreate",
+		"body": [
+			"if exists (select * from dbo.sysobjects where id = object_id(N'dbo.${1:procName}') and objectproperty(id, N'IsProcedure') = 1)",
+			"	 drop procedure dbo.${1:procName}",
+			"go",
+			"",
+			"/*",
+			"${1:$CURRENT_DATE.$CURRENT_MONTH.$CURRENT_YEAR} ${2:VladimirG}; created",
+			"*/",
+			"",
+			"create procedure dbo.${1:procName}",
+			"	 ${4:parameters}",
+			"as",
+			"begin",
+			"	$0",
+			"end",
+			""
+		]
+	},
+	"create stored procedure if not exists (check only)": {
+		"prefix": "sql_SpCheck",
+		"body": [
+			"if not exists (select * from dbo.sysobjects where id = object_id(N'dbo.${1:procName}') and objectproperty(id, N'IsProcedure') = 1)",
+			"	 exec('create procedure dbo.${1:procName} as')",
+			"go",
+			""
+		]
+	},
+	"drop stored procedure if exists (check only)": {
+		"prefix": "sql_SpDrop",
+		"body": [
+			"if exists (select * from dbo.sysobjects where id = object_id(N'dbo.${1:procName}') and objectproperty(id, N'IsProcedure') = 1)",
+			"	 drop procedure dbo.${1:procName}",
+			"go",
+			""
+		]
+	},
+	"create function if not exists (check only)": {
+		"prefix": "sql_FnCheck",
+		"body": [
+			"if not exists (select * from dbo.sysobjects where id = object_id(N'${1:funcName}') and xtype in (N'FN', N'IF', N'TF'))",
+			"  exec('create function ${1:funcName}() returns int as begin return 1 end')",
+			"go",
+			""
+		]
+	},
+	"drop function if exists (check only)": {
+		"prefix": "sql_FnDrop",
+		"body": [
+			"if exists (select * from dbo.sysobjects where id = object_id(N'${1:funcName}') and xtype in (N'FN', N'IF', N'TF'))",
+			"  drop function ${1:funcName}",
+			"go",
+			""
+		]
+	},
+	"add new column": {
+		"prefix": "sql_ColumnAdd",
+		"body": [
+			"if exists (select * from information_schema.tables where table_name = '${1:tableName}' and table_schema = '${2:dbo}')",
+			"	and not exists (",
+			"		select * from information_schema.columns where table_name = '${1:tableName}' and column_name = '${3:columnName}')",
+			"",
+			"	alter table ${2:dbo}.${1:tableName}",
+			"		add ${3:columnName} ${4:varchar(100)} ${5:null}",
+			"go",
+			"$0",
+		]
+	},
+	"raiserror print": {
+		"prefix": "sql_RaisError",
+		"body": [
+			"raiserror(${1:@message}, 0, 1) with nowait"
+		]
+	},
+	"create scalar function": {
+		"prefix": "sql_FnScalarCreate",
+		"body": [
+			"if exists (select * from dbo.sysobjects where id = object_id(N'${1:funcName}') and xtype in (N'FN', N'IF', N'TF'))",
+			"  drop function ${1:funcName}",
+			"go",
+			"",
+			"/*",
+			"${1:$CURRENT_DATE.$CURRENT_MONTH.$CURRENT_YEAR} ${2:VladimirG}; created",
+			"*/",
+			"",
+			"create function ${1:funcName}(${4:parameters})",
+			"  returns ${5:returns}",
+			"as",
+			"begin",
+			"  $0",
+			"end",
+			"go",
+			""
+		]
+	},
+	"reseed": {
+		"prefix": "sql_Reseed",
+		"body": "dbcc checkident('${1:tableName}', reseed, ${2:newId})$0"
+	},
+	"alter column": {
+		"prefix": "sql_ColumnAlter",
+		"body": [
+		"if exists (select * from information_schema.tables where table_name = '${1:tableName}' and table_schema = '${2:dbo}')",
+		"and exists (",
+		"  select * from information_schema.columns where table_name = '${1:tableName}' and column_name = '${3:columnName}')",
+		"alter table ${2:dbo}.${1:tableName}",
+		"  alter column ${3:columnName} ${4:dataType}",
+		"go"
+		]
+	},
+	"rename column": {
+		"prefix": "sql_ColumnRename",
+		"body": [
+		"if exists (select * from information_schema.tables where table_name = '${1:tableName}' and table_schema = '${2:dbo}')",
+		"and exists (",
+		"  select * from information_schema.columns where table_name = '${1:tableName}' and column_name = '${3:columnName}')",
+		"exec sp_rename '${1:tableName}.${2:columnName}', '${4:newColumnName}'",
+		"go"
+		]
+	},
+	"drop column": {
+		"prefix": "sql_ColumnDrop",
+		"body": [
+		"if exists (select * from information_schema.tables where table_name = '${1:tableName}' and table_schema = '${2:dbo}')",
+		"and exists (",
+		"  select * from information_schema.columns where table_name = '${1:tableName}' and column_name = '${3:columnName}')",
+		"alter table ${2:dbo}.${1:tableName}",
+		"  drop column ${3:columnName}",
+		"go"
+		]
+	},
+	"create table": {
+		"prefix": "sql_TableCreate",
+		"description": "create table if not exists",
+		"body": [
+			"if not exists (select * from information_schema.tables where table_name = '${1:tableName}' and table_schema = '${2:dbo}')",
+			"  create table ${2:dbo}.${1:tableName}",
+			"  (",
+			"    $0",
+			"  )",
+			"go"
+		]
+	},
+	"default constraint": {
+		"prefix": "sql_DefaultConstrCreate",
+		"description": "create new default contstraint",
+		"body": [
+			"if not exists (",
+			"  select *",
+			"  from sys.default_constraints as c",
+			"  inner join sys.objects as ot on c.parent_object_id = ot.object_id",
+			"  inner join sys.all_columns as col on ot.object_id = col.object_id",
+			"    and c.parent_column_id = col.column_id",
+			"  where ot.name = '${1:table_name}'",
+			"    and col.name = '${2:column_name}')",
+			"  --",
+			"  alter table dbo.${1:table_name}",
+			"    add constraint DF_${1:table_name}_${2:column_name}",
+			"      default ${3:default_value} for ${2:column_name}",
+			"go"
+		]
+	},
+	"default constraint": {
+		"prefix": "sql_DefaultConstrDrop",
+		"description": "drop default contstraint",
+		"body": [
+			"declare @df_name varchar(max) = (",
+			"  select top 1 c.[name]",
+			"  from sys.default_constraints as c",
+			"  inner join sys.objects as ot on c.parent_object_id = ot.object_id",
+			"  inner join sys.all_columns as col on ot.object_id = col.object_id",
+			"    and c.parent_column_id = col.column_id",
+			"  where ot.name = '${1:table_name}'",
+			"    and col.name = '${2:column_name}')",
+			"  --",
+			"  if (@df_name is not null)"
+			"    exec ('alter table ${1:table_name} drop constraint ' + @df_name)",
+			"go"
+		]
+	},
+	"cursor template": {
+		"prefix": "sql_CursorTemplate",
+		"description": "new cursor template",
+		"body": [
+			"declare ${1:cursor_name} cursor local for",
+			"select ${2:columns_list}",
+			"from ${3:table_name}",
+			"",
+			"open ${1:cursor_name}",
+			"",
+			"fetch next from ${1:cursor_name} into ${4:variables}",
+			"",
+			"while @@fetch_status = 0",
+			"begin",
+			"",
+			"  $0		",
+			"",
+			"  fetch next from ${1:cursor_name} into ${4:variables}",
+			"end",
+			"",
+			"close ${1:cursor_name}",
+			"deallocate ${1:cursor_name}"
+		]
+	},
+	"create table function":{
+		"prefix": "sql_FnTableCreate",
+		"description": "new table function",
+		"body": [
+			"if exists (select * from dbo.sysobjects where id = object_id(N'dbo.${1:func_name}') and xtype in (N'FN', N'IF', N'TF'))",
+			"  drop function dbo.${1:func_name}",
+			"go",
+			"",
+			"/*",
+			"${1:$CURRENT_DATE.$CURRENT_MONTH.$CURRENT_YEAR} ${2:VladimirG}; created",
+			"*/",
+			"",
+			"create function dbo.${1:func_name}(${3:parameters})",
+			"returns table",
+			"as",
+			"return (",
+			"$0",
+			")",
+			"go",
+			"",
+			"set quoted_identifier off",
+			"go",
+			"set ansi_nulls on",
+			"go",
+		]
+	},
+	"region":{
+		"prefix": "sql_region",
+		"description": "new region",
+		"body": [
+			"--#region ${1:region_name}",
+			"",
+			"${0}",
+			"",
+			"--#endregion ${1:region_name}"
+		]
+	},
+	"drop table": {
+		 "prefix": "sql_TableDrop",
+		 "description": "drop table if exists",
+		 "body": [
+			"if exists (select * from information_schema.tables where table_schema = '${1:dbo}' and table_name = '${2:table_name}')",
+			"  drop table ${1:dbo}.${2:table_name}",
+			"$0"
+		 ]
+	},
+	"constraints list": {
+		"prefix": "sql_ConstrList",
+		"body": [
+			"select * from sys.key_constraints where object_name(parent_object_id) = '${1:table_name}'"
+		]
+	},
+	"created header": {
+		"prefix": "sql_commentHistory",
+		"description": "adds header with script history",
+		"body":[
+			"/*",
+			"${1:$CURRENT_DATE.$CURRENT_MONTH.$CURRENT_YEAR} ${2:VladimirG}; created",
+			"*/",
+			"$0"
+		]
+	},
+	"take offline":{
+		"prefix": "sql_DbOffline",
+		"description": "Take database offline",
+		"body": [
+			"if (select top 1 state_desc from sys.databases where name = '${1:db_name}') != 'OFFLINE'",
+			"  alter database ${1:db_name} set offline with rollback immediate",
+			"go",
+			"$0"
+		]
+	},
+	"bring online":{
+		"prefix": "sql_DbOnline",
+		"description": "Bring database online",
+		"body": [
+			"if (select top 1 state_desc from sys.databases where name = '${1:db_name}') != 'ONLINE'",
+			"  alter database ${1:db_name} set online with rollback immediate",
+			"go",
+			"$0"
+		]
+	},
+	"create view": {
+		"prefix": "sql_viewCreate",
+		"description": "Creates new view (drop old version if exists)",
+		"body": [
+			"if exists (select * from sys.objects where name = ${1:v_name} objectproperty(object_id, 'IsView') = 1)",
+				"drop view ${1:v_name}",
+			"go",
+			"",
+			"/*",
+			"${1:$CURRENT_DATE.$CURRENT_MONTH.$CURRENT_YEAR} ${2:VladimirG}; created",
+			"*/",
+			"",
+			"create view ${1:v_name}",
+			"  $0",
+			""
+		]
+	}
+}
